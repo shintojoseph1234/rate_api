@@ -1,0 +1,8 @@
+{
+	"mongodb": {
+		"host": "localhost",
+		"port": 27017,
+		"database": "prices_db",
+		"collection": "prices_collection"
+	}
+}
