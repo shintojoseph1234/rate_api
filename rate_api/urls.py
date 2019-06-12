@@ -17,8 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 import rest_framework
 
+from rate_api import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
+    # index view path
+    path('', views.index),
 
 ]

@@ -36,7 +36,6 @@ config_file.close()
 # mongodb_host        = config_data['mongodb']['host']
 
 
-
 def get_error_message(error_type, message):
 
     if error_type == "DATA_ERROR":
