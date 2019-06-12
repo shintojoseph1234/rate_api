@@ -16,6 +16,10 @@ urlpatterns = [
     # scheme view
     path('schema/', get_schema_view(title="Rate API"), name="schema_view"),
 
+    # api notes
+    # path('notes/', views.notes_list, name="sample"),
+
+
     # GET average_price for each day
     path('rates/<str:date_from>/<str:date_to>/<str:origin>/<str:destination>/', views.rates, name="rates"),
 
