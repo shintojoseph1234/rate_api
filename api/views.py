@@ -19,11 +19,9 @@ from .models import Ports, Prices, Regions
 import os
 import csv
 import json
+import requests
 import datetime
 import pandas as pd
-
-# MongoDB imports
-from pymongo import MongoClient
 
 
 ################################## configuration file
@@ -35,19 +33,7 @@ config_data = json.load(config_file)
 config_file.close()
 
 # Configuration of Django mongodb
-mongodb_host        = config_data['mongodb']['host']
-mongodb_port        = config_data['mongodb']['port']
-mongodb_database    = config_data['mongodb']['database']
-mongodb_collection  = config_data['mongodb']['collection']
-
-
-################################# MongoDB connections
-# Connecting to mongodb
-client = MongoClient(host = mongodb_host, port = mongodb_port)
-# database
-db = client[mongodb_database]
-# collection
-collection = db[mongodb_collection]
+# mongodb_host        = config_data['mongodb']['host']
 
 
 
@@ -122,6 +108,23 @@ def slug_to_code(slug):
 
     return code_list
 
+def exchange_rates(amount, currency_code):
+
+    # parameters to GET
+    PARAMS = {'app_id':"a2c1d23bde4c422491fe5ae8d0625e1d"}
+    # base url
+    URL = "https://openexchangerates.org/api/latest.json"
+
+    # GET request
+    r = requests.get(url = URL, params = PARAMS)
+
+    # extracting data in json format
+    data = r.json()
+
+    # convert amount into USD
+    usd_amount = amount/data['rates'][currency_code.upper()]
+
+    return usd_amount
 
 def db_connection():
     # from django.db import connection
@@ -221,7 +224,7 @@ def rates_null(request, date_from, date_to, origin, destination):
 
 ################## POST API
 
-class UploadViewSet(GenericAPIView):
+class UploadPriceViewSet(GenericAPIView):
     # """
     # # TODO: include docs here
     # """
@@ -240,7 +243,7 @@ class UploadViewSet(GenericAPIView):
             return get_error_message("DATA_ERROR", str(serializer.errors))
 
         # inputs from API
-        price               = data['price']
+        prices              = data['price']
         date_to             = data['date_to']
         date_from           = data['date_from']
         origin_code         = data['origin_code']
@@ -252,19 +255,93 @@ class UploadViewSet(GenericAPIView):
             date_range = pd.date_range(start=date_from, end=date_to).date.tolist()
 
         # if generated date length and price doesnt match
-        if len(date_range) != len(price):
+        if len(date_range) != len(prices):
             # return error response
             return get_error_message("DATA_ERROR", "price and generated date length does not match")
 
         try:
             # obtain each date and price in list
-            for date, price in zip(date_range, price):
+            for date, price in zip(date_range, prices):
                 # update if not in model else create new
                 prices_obj, created = Prices.objects.update_or_create(
                                                                     orig_code   = origin_code,
                                                                     dest_code   = destination_code,
                                                                     day         = date,
-                                                                    defaults={'price': price},
+                                                                    defaults    = {'price': price},
+                                                                    )
+            # response messages
+            saved_status = True
+            message = "Data successfully ingested"
+            status_code = status.HTTP_201_CREATED
+
+        except:
+            # response messages
+            saved_status = True
+            message = "Failed to ingest data"
+            status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
+
+        # response
+        success = [{
+                    "status": saved_status,
+                    "data": {
+                            "message": message
+                            }
+                   }]
+
+        return Response(success, status=status_code)
+
+
+class UploadUsdPriceViewSet(GenericAPIView):
+    # """
+    # # TODO: include docs here
+    # """
+    queryset = ''
+    serializer_class = UploadUsdPricesSerializer
+
+    def post(self, request, *args, **kwargs):
+
+        # obtain the data
+        data = request.data
+        # check data with serializer
+        serializer = UploadUsdPricesSerializer(data=data)
+        # if serialiser not valid
+        if not serializer.is_valid():
+            # return error message
+            return get_error_message("DATA_ERROR", str(serializer.errors))
+
+        # inputs from API
+        prices              = data['price']
+        date_to             = data['date_to']
+        date_from           = data['date_from']
+        origin_code         = data['origin_code']
+        destination_code    = data['destination_code']
+        currency_code       = data['currency_code']
+
+
+        # if date length does not match
+        if date_from != date_to:
+            # generate a list of dates
+            date_range = pd.date_range(start=date_from, end=date_to).date.tolist()
+
+        # if generated date length and price doesnt match
+        if len(date_range) != len(prices):
+            # return error response
+            return get_error_message("DATA_ERROR", "price and generated date length does not match")
+
+
+        try:
+            # obtain each date and price in list
+            for date, price in zip(date_range, prices):
+
+                # convert price into USD
+                price = exchange_rates(price, currency_code)
+
+                # update if not in model else create new
+                prices_obj, created = Prices.objects.update_or_create(
+                                                                    orig_code   = origin_code,
+                                                                    dest_code   = destination_code,
+                                                                    day         = date,
+                                                                    defaults    = {'price': price},
                                                                     )
             # response messages
             saved_status = True

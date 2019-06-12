@@ -16,10 +16,6 @@ urlpatterns = [
     # scheme view
     path('schema/', get_schema_view(title="Rate API"), name="schema_view"),
 
-    # api notes
-    # path('notes/', views.notes_list, name="sample"),
-
-
     # GET average_price for each day
     path('rates/<str:date_from>/<str:date_to>/<str:origin>/<str:destination>/', views.rates, name="rates"),
 
@@ -27,6 +23,12 @@ urlpatterns = [
     path('rates_null/<str:date_from>/<str:date_to>/<str:origin>/<str:destination>/', views.rates_null, name="rates_null"),
 
     # POST upload_price
-    path('upload/', views.UploadViewSet.as_view(), name="sample"),
+    path('upload_price/', views.UploadPriceViewSet.as_view(), name="upload_usd_price"),
+
+    # POST upload_usd_price
+    path('upload_usd_price/', views.UploadUsdPriceViewSet.as_view(), name="upload_usd_price"),
+
+
+
 
 ]
