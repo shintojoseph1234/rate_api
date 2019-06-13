@@ -28,6 +28,8 @@ urlpatterns = [
     # POST upload_usd_price
     path('upload_usd_price/', views.UploadUsdPriceViewSet.as_view(), name="upload_usd_price"),
 
+    # GET average_price for each day
+    path('rates_sql/<str:date_from>/<str:date_to>/<str:origin>/<str:destination>/', views.rates_sql, name="rates_sql"),
 
 
 

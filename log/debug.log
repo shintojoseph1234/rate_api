@@ -1634,3 +1634,80 @@ Traceback (most recent call last):
     "or load this tag?" % (token.lineno, command)
 django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 19: 'static'. Did you forget to register or load this tag?
 ERROR "GET / HTTP/1.1" 500 141337
+ERROR Internal Server Error: /api/rates_sql/2016-01-01/2016-01-01/CNSGH/north_europe_main/
+Traceback (most recent call last):
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 495, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 455, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 492, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/decorators.py", line 55, in handler
+    return func(*args, **kwargs)
+  File "/home/shinto/Documents/projects/rate_project/rate_api/rate_api/api/views.py", line 259, in rates_sql
+    glass_json = rates_serialized(date_from, date_to, origin, destination)
+  File "/home/shinto/Documents/projects/rate_project/rate_api/rate_api/api/views.py", line 242, in rates_serialized
+    data = serializer.data
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/serializers.py", line 768, in data
+    ret = super(ListSerializer, self).data
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/serializers.py", line 258, in data
+    raise AssertionError(msg)
+AssertionError: When a serializer is passed a `data` keyword argument you must call `.is_valid()` before attempting to access the serialized `.data` representation.
+You should either call `.is_valid()` first, or access `.initial_data` instead.
+ERROR "GET /api/rates_sql/2016-01-01/2016-01-01/CNSGH/north_europe_main/ HTTP/1.1" 500 18775
+ERROR Internal Server Error: /api/rates_sql/2016-01-01/65656/CNSGH/north/
+Traceback (most recent call last):
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 495, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 455, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 492, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/decorators.py", line 55, in handler
+    return func(*args, **kwargs)
+  File "/home/shinto/Documents/projects/rate_project/rate_api/rate_api/api/views.py", line 289, in rates_sql
+    dest_code__in=destination
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/query.py", line 892, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/query.py", line 910, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1290, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1318, in _add_q
+    split_subq=split_subq, simple_col=simple_col,
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1251, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1116, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/lookups.py", line 20, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/lookups.py", line 210, in get_prep_lookup
+    rhs_value = self.lhs.output_field.get_prep_value(rhs_value)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/fields/__init__.py", line 1268, in get_prep_value
+    return self.to_python(value)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/fields/__init__.py", line 1243, in to_python
+    params={'value': value},
+django.core.exceptions.ValidationError: ["'65656' value has an invalid date format. It must be in YYYY-MM-DD format."]
+ERROR "GET /api/rates_sql/2016-01-01/65656/CNSGH/north/ HTTP/1.1" 500 19996

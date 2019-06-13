@@ -48,7 +48,7 @@
                             </h1>
 
                             <div class="hs-line-6">
-                                REST API created by DJANGO &amp;&nbsp;DJANGO REST FRAMEWORK
+                                REST API created using DJANGO &amp;&nbsp;DJANGO REST FRAMEWORK
                             </div>
 
                         </div>
@@ -160,8 +160,8 @@
                                 <ul class="mn-sub">
 
                                     <li><a href="">English</a></li>
+                                    <li><a href="">Norway</a></li>
                                     <li><a href="">France</a></li>
-                                    <li><a href="">Germany</a></li>
 
                                 </ul>
 
@@ -192,7 +192,7 @@
                 <div class="container relative">
 
                     <h2 class="section-title font-alt mb-70 mb-sm-40">
-                        Available API's
+                      <a href="/api" style="text-decoration:none"> Available API's </a>
                     </h2>
 
                     <!-- Features Grid -->
@@ -204,11 +204,12 @@
                                 <div class="alt-features-icon">
                                     <span class="icon-flag"></span>
                                 </div>
-                                <h3 class="alt-features-title font-alt">We’re Creative</h3>
+                                <a href="/api/rates/2016-01-01/2016-01-02/CNGGZ/EETLL/" style="text-decoration:none">
+                                  <h3 class="alt-features-title font-alt">RATES API</h3>
+                                </a>
                                 <div class="alt-features-descr align-left">
-                                    Lorem ipsum dolor sit amet, c-r adipiscing elit.
-                                    In maximus ligula semper metus pellentesque mattis.
-                                    Maecenas  volutpat, diam enim.
+                                  API endpoint that returns a list with the average prices
+                                   for each day on a route between Port Codes origin and destination.
                                 </div>
                             </div>
                         </div>
@@ -220,11 +221,13 @@
                                 <div class="alt-features-icon">
                                     <span class="icon-clock"></span>
                                 </div>
-                                <h3 class="alt-features-title font-alt">We’re Punctual</h3>
+                                <a href="/api/rates_null/2016-01-01/2016-01-02/CNGGZ/EETLL/" style="text-decoration:none">
+                                  <h3 class="alt-features-title font-alt">RATES NULL API</h3>
+                                </a>
                                 <div class="alt-features-descr align-left">
-                                    Proin fringilla augue at maximus vestibulum.
-                                    Nam pulvinar vitae neque et porttitor. Praesent sed
-                                    nisi eleifend, lorem fermentum orci sit amet, iaculis libero.
+                                    API endpoint that returns a list with the average prices
+                                    for each day on a route between Port Codes origin and destination,
+                                    except null values for days on which there are less than 3 prices in total.
                                 </div>
                             </div>
                         </div>
@@ -236,11 +239,13 @@
                                 <div class="alt-features-icon">
                                     <span class="icon-hotairballoon"></span>
                                 </div>
-                                <h3 class="alt-features-title font-alt">We have magic</h3>
+                                <a href="/api/upload_price" style="text-decoration:none">
+                                  <h3 class="alt-features-title font-alt">UPLOAD PRICES API</h3>
+                                </a>
                                 <div class="alt-features-descr align-left">
-                                    Curabitur iaculis accumsan augue, nec finibus mauris pretium eu.
-                                    Duis placerat ex gravida nibh tristique porta. Nulla facilisi.
-                                    Suspendisse ultricies eros blandit.
+                                    API endpoint where you can upload a price,
+                                    including the following parameters:
+                                    date_from, date_to, origin_code, destination_code, price
                                 </div>
                             </div>
                         </div>
@@ -252,11 +257,15 @@
                                 <div class="alt-features-icon">
                                     <span class="icon-heart"></span>
                                 </div>
-                                <h3 class="alt-features-title font-alt">We love minimalism</h3>
+                                <h3 class="alt-features-title font-alt"></h3>
+                                <a href="/api/upload_usd_price" style="text-decoration:none">
+                                  <h3 class="alt-features-title font-alt">UPLOAD USD PRICES API</h3>
+                                </a>
                                 <div class="alt-features-descr align-left">
-                                    Cras luctus interdum sodales. Quisque quis odio dui. Sedes sit
-                                    amet neque malesuada, lobortis  commodo magna ntesque pharetra
-                                    metus vivera sagittis.
+                                  API endpoint where you can upload a price,
+                                  including the following parameters:
+                                  date_from, date_to, origin_code, destination_code, price.
+                                  Accept prices in different currencies and convert into USD before saving
                                 </div>
                             </div>
                         </div>
@@ -268,11 +277,13 @@
                                 <div class="alt-features-icon">
                                     <span class="icon-linegraph"></span>
                                 </div>
-                                <h3 class="alt-features-title font-alt">We’re responsible</h3>
+                                <a href="/api/rates_sql/2016-01-01/2016-01-02/CNGGZ/EETLL/" style="text-decoration:none">
+                                  <h3 class="alt-features-title font-alt">RATES SQL API</h3>
+                                </a>
                                 <div class="alt-features-descr align-left">
-                                    Fusce aliquet quam eget neque ultrices elementum. Nulla posuere
-                                    felis id arcu blandit sagittis. Eleifender vestibulum purus, sit
-                                    amet vulputate risus.
+                                    API endpoint that returns a list with the average
+                                    prices for each day on a route between Port Codes origin and destination,
+                                    using raw SQL instead of using ORM querying tool.
                                 </div>
                             </div>
                         </div>
@@ -284,11 +295,11 @@
                                 <div class="alt-features-icon">
                                     <span class="icon-chat"></span>
                                 </div>
-                                <h3 class="alt-features-title font-alt">We're Friendly</h3>
+                                <a href="/api/schema" style="text-decoration:none">
+                                  <h3 class="alt-features-title font-alt">API SCHEMA</h3>
+                                </a>
                                 <div class="alt-features-descr align-left">
-                                    Pulvinar vitae neque et porttitor. Integer non dapibus diam, ac
-                                    eleifend lectus. Praesent sed nisi eleifend, fermentum orci sit
-                                    amet, iaculis libero interdum.
+                                    API endpoint that describes about the schema of the all the API's.
                                 </div>
                             </div>
                         </div>
@@ -320,7 +331,7 @@
                     <div class="align-center">
 
                       <div class="footer-copy font-alt">
-                          <a href="https://www.linkedin.com/in/shintojoseph1234/" target="_blank">© Shinto 2019</a>.
+                          <a href="https://www.linkedin.com/in/shintojoseph1234/" target="_blank" style="text-decoration:none" >© Shinto 2019</a>.
                       </div>
                       <!-- End Copyright -->
 

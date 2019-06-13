@@ -139,6 +139,17 @@ def rates(request, date_from, date_to, origin, destination):
     curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates/2016-01-01/2016-01-01/CNSGH/north_europe_main/
     '''
 
+    # converting data into dictionary format to serialiser
+    data = {"date_from":date_from, "date_to":date_to, "origin":origin, "destination":destination}
+
+    # check data with serializer
+    serializer = RatesSerializer(data=data)
+
+    # if serialiser not valid
+    if not serializer.is_valid():
+        # return error message
+        return get_error_message("DATA_ERROR", str(serializer.errors))
+
     # obtain corresponding code for slugs
     origin      = slug_to_code(slug=origin)
     destination = slug_to_code(slug=destination)
@@ -183,6 +194,18 @@ def rates_null(request, date_from, date_to, origin, destination):
     curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates_null/2016-01-01/2016-01-01/CNSGH/north_europe_main/
     '''
 
+    # converting data into dictionary format to serialiser
+    data = {"date_from":date_from, "date_to":date_to, "origin":origin, "destination":destination}
+
+    # check data with serializer
+    serializer = RatesSerializer(data=data)
+
+    # if serialiser not valid
+    if not serializer.is_valid():
+        # return error message
+        return get_error_message("DATA_ERROR", str(serializer.errors))
+
+
     # obtain corresponding code for slugs
     origin      = slug_to_code(slug=origin)
     destination = slug_to_code(slug=destination)
@@ -217,6 +240,61 @@ def rates_null(request, date_from, date_to, origin, destination):
                 "status": "success",
                 "data": result_dict
                 }]
+
+    return Response(success, status=status.HTTP_200_OK)
+
+
+
+@api_view(['GET'])
+def rates_sql(request, date_from, date_to, origin, destination):
+    '''
+    curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates_sql/2016-01-01/2016-01-01/CNSGH/north_europe_main/
+    '''
+
+    # converting data into dictionary format to serialiser
+    data = {"date_from":date_from, "date_to":date_to, "origin":origin, "destination":destination}
+
+    # check data with serializer
+    serializer = RatesSerializer(data=data)
+
+    # if serialiser not valid
+    if not serializer.is_valid():
+        # return error message
+        return get_error_message("DATA_ERROR", str(serializer.errors))
+
+    # obtain corresponding code for slugs
+    origin      = slug_to_code(slug=origin)
+    destination = slug_to_code(slug=destination)
+
+    # Query the model
+    filtered_queryset = Prices.objects.filter(
+                                        day__range=[date_from, date_to],
+                                        orig_code__in=origin,
+                                        dest_code__in=destination
+                                        )
+
+    if filtered_queryset:
+        # retrieving from database and converting into dataframe
+        # df = pd.DataFrame(list(filtered_queryset.values('day', 'price')))
+        df = pd.DataFrame(list(filtered_queryset.values('day', 'price', 'orig_code', 'dest_code')))
+        # find average of same day and convert into integer
+        mean_df = df.groupby(df['day']).mean().astype(int)
+        # reset index and convert index into column
+        mean_df.reset_index(level=0, inplace=True)
+        # rename column
+        mean_df = mean_df.rename(columns={'price': 'average_price'})
+        # convert date to string
+        mean_df["day"] = mean_df["day"].astype(str)
+        # convert result into list of dictionary
+        result_dict = mean_df.to_dict(orient='records')
+    else:
+        result_dict = []
+
+    success = [{
+                "status": "success",
+                "data": result_dict
+                }]
+
 
     return Response(success, status=status.HTTP_200_OK)
 
