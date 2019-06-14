@@ -1,9 +1,10 @@
 # Django imports
 from django.conf import settings
+from django.db import connection
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
 
 # REST imports
 from rest_framework import status
@@ -45,41 +46,12 @@ def get_error_message(error_type, message):
                         "data": {
                             "http_code": "400 BAD REQUEST",
                             "errors": [{
-                                "error_code": 2000,  # FIXME: Suboptimal error format
+                                "error_code": 2000,
                                 "error_message": message
                                 }]
                             }
                         }]
         return Response(error_status, status=status.HTTP_400_BAD_REQUEST)
-
-    elif error_type == "KEY_ERROR":
-
-        error_status = [{
-                        "status": "error",
-                        "data": {
-                                "http_code": "400 BAD REQUEST",
-                                "errors": [{
-                                            "error_code": 2001,
-                                            "error_message": "Key 'request' not found"
-                                            }]
-                                }
-                        }]
-        return Response(error_status, status=status.HTTP_400_BAD_REQUEST)
-
-    elif error_type == "SERVER_ERROR":
-
-        error_status = [{
-                        "status": "error",
-                        "data": {
-                            "http_code": "500 INTERNAL SERVER ERROR",
-                            "errors": [{
-                                "error_code": 2002,
-                                "error_message": "Internal server error"
-                                }]
-                            }
-                        }]
-        return Response(error_status, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
     else:
         error_status = [{
@@ -107,31 +79,46 @@ def slug_to_code(slug):
 
     return code_list
 
+def db_query(sql_query, input):
+
+    # connecting to database
+    with connection.cursor() as cursor:
+        # execute query along with inputs
+        cursor.execute(sql_query, input)
+        # make cursor response data into list of dictionaries
+        query_data = cursor_fetch_all(cursor)
+
+    return query_data
+
+def cursor_fetch_all(cursor):
+    # obtain the column names
+    column_names = [col[0] for col in cursor.description]
+    # initialize empty list
+    result_list = list()
+    # for each rows in response data
+    for row in cursor.fetchall():
+        # convert into
+        result_dict = dict(zip(column_names, row))
+        # append to result_list
+        result_list.append(result_dict)
+
+    return result_list
+
 def exchange_rates(amount, currency_code):
 
     # parameters to GET
     PARAMS = {'app_id':"a2c1d23bde4c422491fe5ae8d0625e1d"}
     # base url
     URL = "https://openexchangerates.org/api/latest.json"
-
     # GET request
     r = requests.get(url = URL, params = PARAMS)
-
     # extracting data in json format
     data = r.json()
-
     # convert amount into USD
     usd_amount = amount/data['rates'][currency_code.upper()]
 
     return usd_amount
 
-def db_connection():
-    # from django.db import connection
-    # cursor = connection.cursor()
-    # ss = cursor.execute('''SELECT count(*) FROM api_prices''')
-    # print (ss)
-    # print ( Prices.objects.all().count())
-    pass
 
 @api_view(['GET'])
 def rates(request, date_from, date_to, origin, destination):
@@ -140,7 +127,11 @@ def rates(request, date_from, date_to, origin, destination):
     '''
 
     # converting data into dictionary format to serialiser
-    data = {"date_from":date_from, "date_to":date_to, "origin":origin, "destination":destination}
+    data = {"date_from":date_from,
+            "date_to":date_to,
+            "origin":origin,
+            "destination":destination
+            }
 
     # check data with serializer
     serializer = RatesSerializer(data=data)
@@ -195,7 +186,11 @@ def rates_null(request, date_from, date_to, origin, destination):
     '''
 
     # converting data into dictionary format to serialiser
-    data = {"date_from":date_from, "date_to":date_to, "origin":origin, "destination":destination}
+    data = {"date_from":date_from,
+            "date_to":date_to,
+            "origin":origin,
+            "destination":destination
+            }
 
     # check data with serializer
     serializer = RatesSerializer(data=data)
@@ -252,7 +247,11 @@ def rates_sql(request, date_from, date_to, origin, destination):
     '''
 
     # converting data into dictionary format to serialiser
-    data = {"date_from":date_from, "date_to":date_to, "origin":origin, "destination":destination}
+    data = {"date_from":date_from,
+            "date_to":date_to,
+            "origin":origin,
+            "destination":destination
+            }
 
     # check data with serializer
     serializer = RatesSerializer(data=data)
@@ -266,17 +265,25 @@ def rates_sql(request, date_from, date_to, origin, destination):
     origin      = slug_to_code(slug=origin)
     destination = slug_to_code(slug=destination)
 
-    # Query the model
-    filtered_queryset = Prices.objects.filter(
-                                        day__range=[date_from, date_to],
-                                        orig_code__in=origin,
-                                        dest_code__in=destination
-                                        )
+    # inputs to be given to cursor along with query
+    input = (date_from, date_to)
+    # format origin and destination into tuple like string structure ie: ('CNGGZ')
+    origin = str(origin).replace("[","(").replace("]",")")
+    destination = str(destination).replace("[","(").replace("]",")")
 
-    if filtered_queryset:
+    # sql query
+    sql_query = ''' SELECT  orig_code, dest_code, day, price
+                    FROM api_prices
+                    WHERE ( day BETWEEN %s AND %s AND orig_code IN {0} AND dest_code IN {1} )
+                    '''.format( origin, destination)
+
+    # query data after querying
+    query_data = db_query(sql_query, input)
+
+    # if query_data is not empty enter
+    if query_data:
         # retrieving from database and converting into dataframe
-        # df = pd.DataFrame(list(filtered_queryset.values('day', 'price')))
-        df = pd.DataFrame(list(filtered_queryset.values('day', 'price', 'orig_code', 'dest_code')))
+        df = pd.DataFrame(query_data)
         # find average of same day and convert into integer
         mean_df = df.groupby(df['day']).mean().astype(int)
         # reset index and convert index into column
@@ -299,7 +306,6 @@ def rates_sql(request, date_from, date_to, origin, destination):
     return Response(success, status=status.HTTP_200_OK)
 
 
-################## POST API
 
 class UploadPriceViewSet(GenericAPIView):
     # """
