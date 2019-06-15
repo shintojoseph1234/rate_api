@@ -91,6 +91,6 @@ curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates
 ## Batch processing
 When receiving and updating big batches of new prices
 
-    -  Noticed that data is in the format of timeseries. So change the database to a NoSQL database (MongoDB),
-	   so that inserting and updating large amount of data to the database can be done fastly.
-	-  Optimise the function with big calculations using [numba](https://numba.pydata.org/) or [cython](https://cython.readthedocs.io/en/latest/src/tutorial/cython_tutorial.html)  
+-  Noticed that data is in the format of timeseries. So change the database to a NoSQL database (MongoDB),
+   so that inserting and updating large amount of data to the database can be done fastly.
+-  Optimise the function with big calculations using [numba](https://numba.pydata.org/) or [cython](https://cython.readthedocs.io/en/latest/src/tutorial/cython_tutorial.html)  
