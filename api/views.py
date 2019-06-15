@@ -18,7 +18,6 @@ from api.models import Ports, Prices, Regions
 
 # other imports
 import os
-import csv
 import json
 import requests
 import datetime
@@ -466,13 +465,15 @@ class UploadPriceViewSet(GenericAPIView):
         try:
             # obtain each date and price in list
             for date, price in zip(date_range, prices):
-                # update if not in model else create new
-                prices_obj, created = Prices.objects.update_or_create(
-                                                                    orig_code   = origin_code,
-                                                                    dest_code   = destination_code,
-                                                                    day         = date,
-                                                                    defaults    = {'price': price},
-                                                                    )
+                # insert into database
+                p = Prices( orig_code   = origin_code,
+                            dest_code   = destination_code,
+                            day         = date,
+                            price       = price,
+                            )
+                # saving assigined data
+                p.save()
+
             # response messages
             saved_status = True
             message = "Data successfully ingested"
@@ -563,13 +564,15 @@ class UploadUsdPriceViewSet(GenericAPIView):
                 # convert price into USD
                 price = exchange_rates(price, currency_code)
 
-                # update if not in model else create new
-                prices_obj, created = Prices.objects.update_or_create(
-                                                                    orig_code   = origin_code,
-                                                                    dest_code   = destination_code,
-                                                                    day         = date,
-                                                                    defaults    = {'price': price},
-                                                                    )
+                # insert into database
+                p = Prices( orig_code   = origin_code,
+                            dest_code   = destination_code,
+                            day         = date,
+                            price       = price,
+                            )
+                # saving assigined data
+                p.save()
+
             # response messages
             saved_status = True
             message = "Data successfully ingested"
