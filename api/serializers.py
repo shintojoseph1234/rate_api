@@ -24,8 +24,8 @@ class RatesSerializer(serializers.Serializer):
 
 class UploadPricesSerializer(serializers.Serializer):
 
-    origin_code         = serializers.CharField()
-    destination_code    = serializers.CharField()
+    origin_code         = serializers.CharField(max_length=5)
+    destination_code    = serializers.CharField(max_length=5)
     date_from           = serializers.DateField()
     date_to             = serializers.DateField()
     price               = serializers.ListField(child=serializers.IntegerField(required=False))
@@ -45,8 +45,8 @@ class UploadPricesSerializer(serializers.Serializer):
 
 class UploadUsdPricesSerializer(serializers.Serializer):
 
-    origin_code         = serializers.CharField()
-    destination_code    = serializers.CharField()
+    origin_code         = serializers.CharField(max_length=5)
+    destination_code    = serializers.CharField(max_length=5)
     date_from           = serializers.DateField()
     date_to             = serializers.DateField()
     price               = serializers.ListField(child=serializers.IntegerField(required=False))
