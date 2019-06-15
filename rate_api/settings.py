@@ -25,7 +25,7 @@ SECRET_KEY = '!lswrt)am8r(9#a@!8z3tcoh8qp$-nui!is*a#skmjc7oq!49b'
 DEBUG = True
 
 # allowed hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 ################################## Application definition
 INSTALLED_APPS = [
@@ -89,7 +89,8 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-#
+
+# default sqlite database
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',

@@ -20,6 +20,12 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install require
 ```bash
 pip install --upgrade -r requirements.txt
 ```
+Execute Dockerfile and start the container
+```bash
+docker build -t ratestask .
+docker run -p 0.0.0.0:5432:5432 --name ratestask ratestask
+```
+
 Migrate the database
 ```bash
 python manage.py makemigrations
@@ -83,3 +89,8 @@ curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates
 
 
 ## Batch processing
+When receiving and updating big batches of new prices
+
+-  Noticed that data is in the format of timeseries. So change the database to a NoSQL database (MongoDB),
+   so that inserting and updating large amount of data to the database can be done fastly.
+-  Optimise the function with big calculations using [numba](https://numba.pydata.org/) or [cython](https://cython.readthedocs.io/en/latest/src/tutorial/cython_tutorial.html)  

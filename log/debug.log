@@ -1,0 +1,125 @@
+ERROR Internal Server Error: /api/upload_price/
+Traceback (most recent call last):
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 495, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 455, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 492, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shinto/Documents/projects/rate_project/rate_api/rate_api/api/views.py", line 471, in post
+    defaults    = {'price': price},
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/query.py", line 554, in update_or_create
+    obj = self.select_for_update().get(**kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/query.py", line 412, in get
+    (self.model._meta.object_name, num)
+api.models.Prices.MultipleObjectsReturned: get() returned more than one Prices -- it returned 3!
+ERROR "POST /api/upload_price/ HTTP/1.1" 500 18304
+ERROR Internal Server Error: /api/upload_price/
+Traceback (most recent call last):
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2657, in get_loc
+    return self._engine.get_loc(key)
+  File "pandas/_libs/index.pyx", line 108, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 129, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index_class_helper.pxi", line 91, in pandas._libs.index.Int64Engine._check_type
+KeyError: 'day'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 495, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 455, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 492, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shinto/Documents/projects/rate_project/rate_api/rate_api/api/views.py", line 467, in post
+    df = pd.DataFrame(list( Prices.objects.all())).set_index('day')
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/pandas/core/frame.py", line 4178, in set_index
+    level = frame[col]._values
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/pandas/core/frame.py", line 2927, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/pandas/core/indexes/base.py", line 2659, in get_loc
+    return self._engine.get_loc(self._maybe_cast_indexer(key))
+  File "pandas/_libs/index.pyx", line 108, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 129, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index_class_helper.pxi", line 91, in pandas._libs.index.Int64Engine._check_type
+KeyError: 'day'
+ERROR "POST /api/upload_price/ HTTP/1.1" 500 19062
+ERROR Internal Server Error: /api/upload_price/
+Traceback (most recent call last):
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 495, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 455, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 492, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shinto/Documents/projects/rate_project/rate_api/rate_api/api/views.py", line 473, in post
+    defaults    = {'price': price},
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/query.py", line 554, in update_or_create
+    obj = self.select_for_update().get(**kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/query.py", line 412, in get
+    (self.model._meta.object_name, num)
+api.models.Prices.MultipleObjectsReturned: get() returned more than one Prices -- it returned 3!
+ERROR "POST /api/upload_price/ HTTP/1.1" 500 18304
+ERROR Internal Server Error: /api/upload_price/
+Traceback (most recent call last):
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 495, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 455, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/rest_framework/views.py", line 492, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shinto/Documents/projects/rate_project/rate_api/rate_api/api/views.py", line 473, in post
+    defaults    = {'price': price},
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/query.py", line 554, in update_or_create
+    obj = self.select_for_update().get(**kwargs)
+  File "/home/shinto/Documents/virtual_envs/rate_api/lib/python3.6/site-packages/django/db/models/query.py", line 412, in get
+    (self.model._meta.object_name, num)
+api.models.Prices.MultipleObjectsReturned: get() returned more than one Prices -- it returned 3!
+ERROR "POST /api/upload_price/ HTTP/1.1" 500 18304

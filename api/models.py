@@ -9,8 +9,8 @@ class Ports(models.Model):
 
 
 class Prices(models.Model):
-    orig_code   = models.CharField(models.Model, max_length=5, primary_key=True)
-    dest_code   = models.CharField(models.Model, max_length=5)
+    orig_code   = models.TextField(models.Model, max_length=5)
+    dest_code   = models.TextField(models.Model, max_length=5)
     day         = models.DateField(models.Model)
     price       = models.IntegerField(models.Model, default=0)
 
@@ -21,4 +21,4 @@ class Prices(models.Model):
 class Regions(models.Model):
     slug        = models.CharField(models.Model, max_length=200, primary_key=True)
     name        = models.CharField(models.Model, max_length=200)
-    parent_slug = models.CharField(models.Model, max_length=200)
+    parent_slug = models.CharField(models.Model, max_length=200, null=True, blank=True)
