@@ -33,11 +33,23 @@ config_data = json.load(config_file)
 # close the config file
 config_file.close()
 
-# Configuration of Django mongodb
-# mongodb_host        = config_data['mongodb']['host']
+# Configuration of exchange rate API
+exchange_rates_url  = config_data['exchange_rates']['url']
+exchange_app_id     = config_data['exchange_rates']['app_id']
 
 
 def get_error_message(error_type, message):
+    '''
+    Checks the error type and message,
+    and returns error message with error code
+
+    Parameters:
+        error_type (str)    : The error type.
+        message (dict)      : The response message from serializer.
+
+    Returns:
+        list: returns error message with error code
+    '''
 
     if error_type == "DATA_ERROR":
 
@@ -67,8 +79,19 @@ def get_error_message(error_type, message):
 
     return Response(error_status, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 def slug_to_code(slug):
+    '''
+    Takes slug as input and
+    finds code from the database
+
+    Parameters:
+        slug (str)  : The slug.
+
+    Returns:
+        list: returns list of codes
+
+    '''
+
     # if slug present in parent_slug column enter
     if Ports.objects.filter(parent_slug=slug).exists():
         # filter out the code list for corresponding slug
@@ -80,7 +103,17 @@ def slug_to_code(slug):
     return code_list
 
 def db_query(sql_query, input):
+    '''
+    Takes the sql_query and the inputs,
+    and query the database
 
+    Parameters:
+        sql_query (str) : The sql_query.
+        input (tuple)   : The inputs for the sql_query.
+
+    Returns:
+        list: returns list of dictionary with columns as keys
+    '''
     # connecting to database
     with connection.cursor() as cursor:
         # execute query along with inputs
@@ -91,6 +124,18 @@ def db_query(sql_query, input):
     return query_data
 
 def cursor_fetch_all(cursor):
+    '''
+    Takes cursor object as input and
+     combines the rows and columns into list of dictionary
+
+    Parameters:
+        cursor (object) : The cursor object.
+
+    Returns:
+        list: returns list of dictionary with columns as keys
+            and rows as values
+    '''
+
     # obtain the column names
     column_names = [col[0] for col in cursor.description]
     # initialize empty list
@@ -105,11 +150,20 @@ def cursor_fetch_all(cursor):
     return result_list
 
 def exchange_rates(amount, currency_code):
+    '''
+    Convert amount into USD
 
+    Parameters:
+        amount (int)        : The amount to convert.
+        currency_code (str) : The currency of the input amount.
+
+    Returns:
+        float: returns amount converted into USD
+    '''
     # parameters to GET
-    PARAMS = {'app_id':"a2c1d23bde4c422491fe5ae8d0625e1d"}
+    PARAMS = {'app_id':exchange_app_id}
     # base url
-    URL = "https://openexchangerates.org/api/latest.json"
+    URL = exchange_rates_url
     # GET request
     r = requests.get(url = URL, params = PARAMS)
     # extracting data in json format
@@ -123,7 +177,22 @@ def exchange_rates(amount, currency_code):
 @api_view(['GET'])
 def rates(request, date_from, date_to, origin, destination):
     '''
-    curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates/2016-01-01/2016-01-01/CNSGH/north_europe_main/
+    API endpoint that returns a list with the average prices for each day
+    on a route between Port Codes origin and destination.
+
+    Parameters:
+        date_from (date)    : The from date.
+        date_to (date)      : The to date.
+        origin (str)        : The origin port.
+        destination (str)   : The destination port.
+
+
+    Returns:
+        list: returns a list with the average prices for each day
+            on a route between Port Codes origin and destination
+
+    Curl:
+        curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates/2016-01-01/2016-01-01/CNSGH/north_europe_main/
     '''
 
     # converting data into dictionary format to serialiser
@@ -178,11 +247,27 @@ def rates(request, date_from, date_to, origin, destination):
     return Response(success, status=status.HTTP_200_OK)
 
 
-
 @api_view(['GET'])
 def rates_null(request, date_from, date_to, origin, destination):
     '''
-    curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates_null/2016-01-01/2016-01-01/CNSGH/north_europe_main/
+    API endpoint that returns a list with the average prices for each day
+    on a route between Port Codes origin and destination,
+    except null values for days on which
+    there are less than 3 prices in total.
+
+    Parameters:
+        date_from (date)    : The from date.
+        date_to (date)      : The to date.
+        origin (str)        : The origin port.
+        destination (str)   : The destination port.
+
+
+    Returns:
+        list: returns a list with the average prices for each day
+            on a route between Port Codes origin and destination
+
+    Curl:
+        curl -X GET -H 'Content-Type: application/json' http://localhost:8000/api/rates_null/2016-01-01/2016-01-01/CNGGZ/EETLL/
     '''
 
     # converting data into dictionary format to serialiser
@@ -239,11 +324,26 @@ def rates_null(request, date_from, date_to, origin, destination):
     return Response(success, status=status.HTTP_200_OK)
 
 
-
 @api_view(['GET'])
 def rates_sql(request, date_from, date_to, origin, destination):
     '''
-    curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates_sql/2016-01-01/2016-01-01/CNSGH/north_europe_main/
+    API endpoint that returns a list with the average prices for each day
+    on a route between Port Codes origin and destination,
+    using raw SQL instead of using ORM querying tool.
+
+    Parameters:
+        date_from (date)    : The from date.
+        date_to (date)      : The to date.
+        origin (str)        : The origin port.
+        destination (str)   : The destination port.
+
+
+    Returns:
+        list: returns a list with the average prices for each day
+            on a route between Port Codes origin and destination
+
+    Curl:
+        curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates_sql/2016-01-01/2016-01-01/CNSGH/north_europe_main/
     '''
 
     # converting data into dictionary format to serialiser
@@ -306,11 +406,30 @@ def rates_sql(request, date_from, date_to, origin, destination):
     return Response(success, status=status.HTTP_200_OK)
 
 
-
 class UploadPriceViewSet(GenericAPIView):
-    # """
-    # # TODO: include docs here
-    # """
+    """
+    API endpoint where you can upload a list of prices between
+    date_from and date_to
+
+    Parameters:
+        price (list)            : The list of integer prices.
+        date_from (date)        : The from date.
+        date_to (date)          : The to date.
+        origin_code (str)       : The origin port.
+        destination_code (str)  : The destination port.
+
+    Returns:
+        list: returns a success or failure message
+
+    Curl:
+        curl -X POST -d '''{"date_from": "2016-01-01",
+                            "date_to": "2016-01-02",
+                            "origin_code": "CNGGZ",
+                            "destination_code": "EETLL",
+                            "price": [217, 315]}''' -H "Content-Type: application/json" http://localhost:8000/api/upload_price/
+
+    """
+
     queryset = ''
     serializer_class = UploadPricesSerializer
 
@@ -375,9 +494,32 @@ class UploadPriceViewSet(GenericAPIView):
 
 
 class UploadUsdPriceViewSet(GenericAPIView):
-    # """
-    # # TODO: include docs here
-    # """
+    """
+    API endpoint where you can upload a price,
+    Accept prices in different currencies
+    and convert into USD before saving
+
+    Parameters:
+        price (list)            : The list of integer prices.
+        date_from (date)        : The from date.
+        date_to (date)          : The to date.
+        origin_code (str)       : The origin port.
+        destination_code (str)  : The destination port.
+        currency_code (str)     : The currency of price.
+
+
+    Returns:
+        list: returns a success or failure message
+
+    Curl:
+        curl -X POST -d '''{"date_from": "2016-01-01",
+                            "date_to": "2016-01-02",
+                            "origin_code": "CNGGZ",
+                            "destination_code": "EETLL",
+                            "price": [217, 315],
+                            "currency_code": "INR"}''' -H "Content-Type: application/json" http://localhost:8000/api/upload_usd_price/
+
+    """
     queryset = ''
     serializer_class = UploadUsdPricesSerializer
 

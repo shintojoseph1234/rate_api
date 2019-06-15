@@ -1,8 +1,6 @@
 {
-	"mongodb": {
-		"host": "localhost",
-		"port": 27017,
-		"database": "prices_db",
-		"collection": "prices_collection"
+	"exchange_rates": {
+		"app_id": "a2c1d23bde4c422491fe5ae8d0625e1d",
+		"url": "https://openexchangerates.org/api/latest.json"
 	}
 }

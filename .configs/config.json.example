@@ -1,0 +1,6 @@
+{
+	"exchange_rates": {
+		"app_id": "xxxxxxxxxxxxxxxx",
+		"url": "https://example_url.com"
+	}
+}
