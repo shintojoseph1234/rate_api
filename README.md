@@ -1,10 +1,10 @@
 # Rates API
 
-Rates API is an HTTP-based API capable of
+Rates API is an HTTP-based API capable of returning average prices for each day on a route between Port Codes origin and destination
 
 ## Installation
 
-Install virtual enviroonment  [virtualenv](https://virtualenv.pypa.io/en/stable/installation/) for Dependency Management: Prevent conflicts between dependencies of multiple projects.
+Install virtual enviroonment  [virtualenv](https://virtualenv.pypa.io/en/stable/installation/) for Dependency Management
 
 ```bash
 pip install virtualenv
@@ -34,17 +34,21 @@ Run the server
 python manage.py runserver 8000
 ```
 Open  [localhost:8000](http://localhost:8000/)  in a browser to see the UI
+
 Open  [localhost:8000/api](http://localhost:8000/api/)  in a browser to see the available API
+
 Open  [localhost:8000/api/schema](http://localhost:8000/api/schema/)  in a browser to see the schema of all API
 
 ## POST API's
 
 ## Upload Price API
+API endpoint where you can upload a price, including the following parameters: date_from, date_to, origin_code, destination_code, price
 
 ```bash
 curl -X POST -d '''{"date_from": "2016-01-01","date_to": "2016-01-02","origin_code": "CNGGZ","destination_code": "EETLL","price": [217, 315]}''' -H "Content-Type: application/json" http://localhost:8000/api/upload_price/
 ```
 ## Upload USD Price API
+API endpoint where you can upload prices in different currencies, including the following parameters: date_from, date_to, origin_code, destination_code, price, currency_code
 
 ```bash
 curl -X POST -d '''{"date_from": "2016-01-01","date_to": "2016-01-02","origin_code": "CNGGZ","destination_code": "EETLL","price": [217, 315],"currency_code": "INR"}''' -H "Content-Type: application/json" http://localhost:8000/api/upload_usd_price/
@@ -53,11 +57,13 @@ curl -X POST -d '''{"date_from": "2016-01-01","date_to": "2016-01-02","origin_co
 ## GET API's
 
 ## Rates API
+API endpoint that takes the following parameters: date_from, date_to, origin, destination and returns a list with the average prices for each day on a route between Port Codes origin and destination
 
 ```bash
 curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates/2016-01-01/2016-01-02/CNGGZ/EETLL/
 ```
 ## Rates null API
+API endpoint that takes the following parameters: date_from, date_to, origin, destination and returns a list with the average prices for each day on a route between Port Codes origin and destination except null values for days on which there are less than 3 prices in total.
 
 ```bash
 curl -X GET -H 'Content-Type: application/json'  http://localhost:8000/api/rates_null/2016-01-01/2016-01-02/CNGGZ/EETLL/
