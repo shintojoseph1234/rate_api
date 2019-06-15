@@ -9,7 +9,7 @@ class Ports(models.Model):
 
 
 class Prices(models.Model):
-    orig_code   = models.CharField(models.Model, max_length=5)
+    orig_code   = models.CharField(models.Model, max_length=5, primary_key=True)
     dest_code   = models.CharField(models.Model, max_length=5)
     day         = models.DateField(models.Model)
     price       = models.IntegerField(models.Model, default=0)
