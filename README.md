@@ -39,6 +39,18 @@ Open  [localhost:8000/api](http://localhost:8000/api/)  in a browser to see the 
 
 Open  [localhost:8000/api/schema](http://localhost:8000/api/schema/)  in a browser to see the schema of all API
 
+## Packaging
+
+Alternatively you can also make the entire app into a package
+```bash
+python setup.py sdist
+```
+This creates a directory called dist and builds your new package, rate_API-0.1.tar.gz inside it.
+
+You can then install it by  
+```bash
+pip install rate_API-0.1.tar.gz
+```
 ## POST API's
 
 ## Upload Price API
