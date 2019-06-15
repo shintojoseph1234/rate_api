@@ -22,15 +22,14 @@ urlpatterns = [
     # GET average_price null for less than 3 prices
     path('rates_null/<str:date_from>/<str:date_to>/<str:origin>/<str:destination>/', views.rates_null, name="rates_null"),
 
-    # POST upload_price
-    path('upload_price/', views.UploadPriceViewSet.as_view(), name="upload_usd_price"),
-
-    # POST upload_usd_price
-    path('upload_usd_price/', views.UploadUsdPriceViewSet.as_view(), name="upload_usd_price"),
-
     # GET average_price for each day
     path('rates_sql/<str:date_from>/<str:date_to>/<str:origin>/<str:destination>/', views.rates_sql, name="rates_sql"),
 
+    # POST upload_price
+    path('upload_price/', views.UploadPriceViewSet.as_view(), name="upload_price"),
+
+    # POST upload_usd_price
+    path('upload_usd_price/', views.UploadUsdPriceViewSet.as_view(), name="upload_usd_price"),
 
 
 ]

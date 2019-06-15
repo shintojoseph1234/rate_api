@@ -14,7 +14,7 @@ from rest_framework.generics import GenericAPIView
 
 # local imports
 from api.serializers import *
-from .models import Ports, Prices, Regions
+from api.models import Ports, Prices, Regions
 
 # other imports
 import os
@@ -168,8 +168,10 @@ def exchange_rates(amount, currency_code):
     r = requests.get(url = URL, params = PARAMS)
     # extracting data in json format
     data = r.json()
+    # USD rate of corresponding currency
+    USD_rate = data['rates'][currency_code.upper()]
     # convert amount into USD
-    usd_amount = amount/data['rates'][currency_code.upper()]
+    usd_amount = amount/USD_rate
 
     return usd_amount
 
