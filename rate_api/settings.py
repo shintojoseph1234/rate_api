@@ -143,7 +143,7 @@ CONFIGURATION_FILE = os.path.join(BASE_DIR, '.configs/config.json')
 django_heroku.settings(locals())
 
 #  Add configuration for static files storage using whitenoise
-STATICFILES_STORAGE = 'whitenoise.django.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ######################################## Error logging configuration
 LOGGING = {
