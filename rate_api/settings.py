@@ -79,24 +79,24 @@ REST_FRAMEWORK = {
 }
 
 #################################### postgress database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': '0.0.0.0',
-        'PORT': '5432',
-    }
-}
-
-# default sqlite database
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': '',
+#         'HOST': '0.0.0.0',
+#         'PORT': '5432',
 #     }
 # }
+
+# default sqlite database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 ##################################### Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -128,6 +128,9 @@ USE_TZ = True
 
 
 ###################################### Static files (CSS, JavaScript, Images)
+import django_heroku
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
@@ -136,6 +139,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CONFIGURATION_FILE = os.path.join(BASE_DIR, '.configs/config.json')
 
+django_heroku.settings(locals())
 
 ######################################## Error logging configuration
 LOGGING = {
